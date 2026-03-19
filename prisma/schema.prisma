@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  SCHOOL_ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum SubmissionStatus {
+  PENDING
+  EVALUATED
+  FAILED
+}
+
+model School {
+  id        String   @id @default(cuid())
+  name      String
+  code      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+  sets      CheckingSet[]
+}
+
+model User {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  passwordHash  String
+  name          String
+  role          Role
+  classGrade    String?
+  section       String?
+  rollNumber    String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  schoolId      String?
+  school        School?      @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  createdSets   CheckingSet[] @relation("TeacherSets")
+  submissions   Submission[] @relation("StudentSubmissions")
+  reviewedItems Submission[] @relation("TeacherReviews")
+}
+
+model CheckingSet {
+  id                   String       @id @default(cuid())
+  title                String
+  subject              String
+  classGrade           String
+  section              String?
+  totalMarks           Int
+  customInstructions   String?
+  defaultPromptVersion String       @default("v1")
+  questionPaperPath    String
+  answerKeyPath        String?
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  schoolId             String
+  teacherId            String
+  school               School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacher              User         @relation("TeacherSets", fields: [teacherId], references: [id], onDelete: Cascade)
+  submissions          Submission[]
+}
+
+model Submission {
+  id                 String           @id @default(cuid())
+  studentName        String
+  studentRollNumber  String
+  classGrade         String
+  section            String?
+  answerSheetPath    String
+  status             SubmissionStatus @default(PENDING)
+  failureReason      String?
+  totalAwarded       Float?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  checkingSetId      String
+  studentId          String?
+  reviewerTeacherId  String
+  checkingSet        CheckingSet      @relation(fields: [checkingSetId], references: [id], onDelete: Cascade)
+  student            User?            @relation("StudentSubmissions", fields: [studentId], references: [id], onDelete: SetNull)
+  reviewerTeacher    User             @relation("TeacherReviews", fields: [reviewerTeacherId], references: [id], onDelete: Cascade)
+  evaluationReport   EvaluationReport?
+}
+
+model EvaluationReport {
+  id                String      @id @default(cuid())
+  summary           String
+  strengths         String
+  improvements      String
+  totalMarks        Float
+  awardedMarks      Float
+  gradingPrompt     String
+  rawResponse       String
+  questionBreakdown String
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  submission        Submission  @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  submissionId      String      @unique
+}

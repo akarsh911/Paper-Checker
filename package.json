@@ -1,0 +1,34 @@
+{
+  "name": "paper-checker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -H 0.0.0.0 -p ${PORT:-8081}",
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:init": "sqlite3 /tmp/paper-checker-dev.db < scripts/init-db.sql",
+    "db:seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
+    "@prisma/client": "^6.5.0",
+    "jose": "^5.9.3",
+    "lucide-react": "^0.511.0",
+    "next": "^15.2.2",
+    "prisma": "^6.5.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.53.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}
