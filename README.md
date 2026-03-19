@@ -67,6 +67,8 @@ Or with Compose:
 docker compose up -d --build
 ```
 
+The provided Compose file seeds the demo school and users by default on first boot.
+
 Container behavior:
 
 - Binds to `0.0.0.0` and serves on port `8081`

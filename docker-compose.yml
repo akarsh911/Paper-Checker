@@ -13,7 +13,7 @@ services:
       JWT_SECRET: change-this-before-production
       GEMINI_API_KEY: your-gemini-api-key
       GEMINI_MODEL: gemini-2.0-flash
-      SEED_DEMO_DATA: "false"
+      SEED_DEMO_DATA: "true"
     volumes:
       - paper_checker_data:/app/data
       - paper_checker_uploads:/app/uploads
