@@ -24,8 +24,11 @@ export default async function RootLayout({
         <div className="shell">
           <div className="topbar">
             <Link href="/" className="brand">
-              <span className="eyebrow">Paper Checker</span>
-              <strong>AI exam evaluation for handwritten papers</strong>
+              <span className="logo">PC</span>
+              <span className="brand-text">
+                <span className="eyebrow">Paper Checker</span>
+                <strong>AI exam evaluation for handwritten papers</strong>
+              </span>
             </Link>
 
             <div className="cta-row">

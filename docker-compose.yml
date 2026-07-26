@@ -5,14 +5,13 @@ services:
       dockerfile: Dockerfile
     image: paper-checker:latest
     ports:
-      - "8081:8081"
+      - "9000:8081"          # host 9000 -> container 8081
+    env_file:
+      - .env                  # GEMINI_API_KEY, JWT_SECRET, GEMINI_MODEL
     environment:
       PORT: "8081"
       HOSTNAME: 0.0.0.0
       DATABASE_URL: file:/app/data/paper-checker.db
-      JWT_SECRET: change-this-before-production
-      GEMINI_API_KEY: your-gemini-api-key
-      GEMINI_MODEL: gemini-2.0-flash
       SEED_DEMO_DATA: "true"
     volumes:
       - paper_checker_data:/app/data
