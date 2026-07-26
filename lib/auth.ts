@@ -62,7 +62,9 @@ export async function createSession(user: User) {
   cookieStore.set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    // Only mark Secure when explicitly served over HTTPS. A Secure cookie is never sent
+    // back over plain HTTP, which would silently break login on an http:// deployment.
+    secure: process.env.COOKIE_SECURE === "true",
     path: "/",
     maxAge: 60 * 60 * 24 * 7
   });
